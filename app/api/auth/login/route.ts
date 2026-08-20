@@ -10,14 +10,33 @@ const schema = z.object({
 });
 
 export async function POST(request: Request) {
-  const body = schema.safeParse(await request.json().catch(() => null));
-  if (!body.success) return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+  try {
+    const parsed = schema.safeParse(await request.json().catch(() => null));
 
-  const user = await prisma.user.findUnique({ where: { email: body.data.email.toLowerCase().trim() } });
-  if (!user || !(await verifyPassword(body.data.password, user.passwordHash))) {
-    return NextResponse.json({ error: "E-mail ou senha inválidos" }, { status: 401 });
+    if (!parsed.success) {
+      return NextResponse.json({ error: "Dados inválidos" }, { status: 400 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: parsed.data.email.toLowerCase().trim() },
+    });
+
+    if (!user || !(await verifyPassword(parsed.data.password, user.passwordHash))) {
+      return NextResponse.json(
+        { error: "E-mail ou senha inválidos" },
+        { status: 401 }
+      );
+    }
+
+    await createSession(user.id);
+
+    return NextResponse.json({ ok: true });
+  } catch (error) {
+    console.error("[LOGIN_ERROR]", error);
+
+    return NextResponse.json(
+      { error: "Erro interno ao fazer login. Verifique o banco de dados e tente novamente." },
+      { status: 500 }
+    );
   }
-
-  await createSession(user.id);
-  return NextResponse.json({ ok: true });
 }
