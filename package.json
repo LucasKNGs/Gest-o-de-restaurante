@@ -1,0 +1,36 @@
+{
+  "name": "restaurante-financeiro-v1",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "db:generate": "prisma generate --schema database/prisma/schema.prisma",
+    "db:push": "prisma db push --schema database/prisma/schema.prisma",
+    "db:studio": "prisma studio --schema database/prisma/schema.prisma",
+    "db:seed": "node --env-file=.env database/seed.cjs"
+  },
+  "prisma": {
+    "seed": "node --env-file=.env database/seed.cjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.0",
+    "bcryptjs": "^3.0.2",
+    "next": "16.3.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "xlsx": "^0.18.5",
+    "zod": "^4.1.5"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.1",
+    "prisma": "^6.16.0",
+    "typescript": "^5"
+  }
+}
