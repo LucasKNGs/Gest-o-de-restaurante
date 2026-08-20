@@ -1,6 +1,7 @@
 import { prisma } from "@/backend/lib/prisma";
 import { getRestaurantContext } from "@/backend/lib/context";
 import { redirect } from "next/navigation";
+import LiveCashChart from "@/components/LiveCashChart";
 
 function brl(n: number) { return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" }); }
 
@@ -31,6 +32,7 @@ export default async function DashboardPage() {
         <div className="card"><div className="kpi-label">Saldo do dia</div><div className="kpi-value">{brl(di - de)}</div></div>
         <div className="card"><div className="kpi-label">Contas pendentes</div><div className="kpi-value">{brl(Number(payables._sum.amount || 0))}</div><small className="muted">{payables._count} lançamentos</small></div>
       </div>
+      <LiveCashChart />
       <div className="grid grid-2" style={{ marginTop: 16 }}>
         <div className="card"><h2 className="section-title">Mês atual</h2><p>Entradas: <strong>{brl(mi)}</strong></p><p>Saídas: <strong>{brl(me)}</strong></p><p>Saldo de caixa do período: <strong>{brl(mi-me)}</strong></p></div>
         <div className="card"><h2 className="section-title">Regra importante</h2><p className="muted">Este painel mede movimentação financeira. Para “lucro” contábil real, estoque, competência, impostos e CMV precisam ser tratados corretamente.</p></div>

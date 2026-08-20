@@ -43,7 +43,7 @@ export async function POST(request: Request) {
   if (!parsed.success) return jsonError("Dados inválidos");
   if (!(await refsBelongToRestaurant(auth.ctx.restaurant.id, { accountId: parsed.data.accountId }))) return jsonError("Conta inválida", 403);
   const account = await prisma.account.findFirst({ where: { id: parsed.data.accountId, restaurantId: auth.ctx.restaurant.id } });
-  if (!account || account.type !== "CASH") return jsonError("Abertura de caixa exige uma conta do tipo CASH");
+  if (!account || account.type !== "CASH") return jsonError("Abertura de caixa exige uma conta do tipo Dinheiro / Caixa físico");
   const existing = await prisma.cashSession.findFirst({ where: { restaurantId: auth.ctx.restaurant.id, accountId: account.id, status: "OPEN" } });
   if (existing) return jsonError("Já existe um caixa aberto para esta conta", 409);
   const row = await prisma.cashSession.create({ data: { restaurantId: auth.ctx.restaurant.id, accountId: account.id, openedByUserId: auth.ctx.user.id, openingBalance: parsed.data.openingBalance, notes: parsed.data.notes || null }, include: { account: true, openedBy: { select: { name: true } }, closedBy: { select: { name: true } } } });

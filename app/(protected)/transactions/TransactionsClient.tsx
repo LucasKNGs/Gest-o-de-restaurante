@@ -3,7 +3,15 @@ import { FormEvent, useEffect, useState } from "react";
 
 type Ref = { id: string; name: string; type?: string };
 type Tx = { id: string; type: "INCOME"|"EXPENSE"; description: string; amount: number; occurredAt: string; paymentMethod: string; category?: Ref|null; account?: Ref|null; creator?: { name: string } };
-const payment = ["CASH","PIX","DEBIT_CARD","CREDIT_CARD","BANK_TRANSFER","BOLETO","OTHER"];
+const payment = [
+ {value:"CASH",label:"Dinheiro"},
+ {value:"PIX",label:"Pix"},
+ {value:"DEBIT_CARD",label:"Cartão de débito"},
+ {value:"CREDIT_CARD",label:"Cartão de crédito"},
+ {value:"BANK_TRANSFER",label:"Transferência bancária"},
+ {value:"BOLETO",label:"Boleto"},
+ {value:"OTHER",label:"Outro"}
+];
 function brl(n:number){return n.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});}
 
 export default function TransactionsClient(){
@@ -18,7 +26,7 @@ export default function TransactionsClient(){
  <div className="field span-2"><label>Descrição</label><input name="description" required placeholder="Ex.: vendas do almoço"/></div>
  <div className="field"><label>Valor</label><input name="amount" type="number" step="0.01" min="0.01" required/></div>
  <div className="field"><label>Data</label><input name="occurredAt" type="date" required defaultValue={new Date().toISOString().slice(0,10)}/></div>
- <div className="field"><label>Pagamento</label><select name="paymentMethod">{payment.map(x=><option key={x}>{x}</option>)}</select></div>
+ <div className="field"><label>Pagamento</label><select name="paymentMethod">{payment.map(x=><option key={x.value} value={x.value}>{x.label}</option>)}</select></div>
  <div className="field"><label>Categoria</label><select name="categoryId"><option value="">Sem categoria</option>{refs.categories.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></div>
  <div className="field"><label>Conta/caixa</label><select name="accountId"><option value="">Sem conta</option>{refs.accounts.map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></div>
  <div className="field span-4"><label>Observação</label><input name="notes"/></div><div className="span-4"><button className="btn primary">Salvar movimentação</button></div></form></div>
