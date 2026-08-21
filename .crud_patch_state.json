@@ -1,0 +1,10 @@
+{
+  "backup": "/workspaces/Gest-o-de-restaurante/backup_crud_20260821_000516",
+  "createdAt": "2026-08-21T00:05:16.873137",
+  "replaced": [
+    "app/(protected)/suppliers/page.tsx",
+    "app/(protected)/transactions/page.tsx",
+    "app/(protected)/payables/page.tsx",
+    "app/(protected)/inventory/page.tsx"
+  ]
+}
